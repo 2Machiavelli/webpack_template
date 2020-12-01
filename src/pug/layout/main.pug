@@ -1,0 +1,16 @@
+include ../utils/mixins
+block variables
+
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title #{title}
+    meta(name="viewport", content=description)
+    block head
+
+  body(class=pageClass)
+    .wrapper
+      include ../includes/modules/header
+      block content
+      include ../includes/modules/footer
