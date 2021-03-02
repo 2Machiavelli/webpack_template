@@ -3,6 +3,7 @@ const fs = require('fs')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const PATHS = {
   src: path.join(__dirname, '../src'),
@@ -23,7 +24,7 @@ module.exports = {
   output: {
     filename: `${PATHS.assets}js/[name].[hash].js`,
     path: PATHS.dist,
-    publicPath: '/'
+    publicPath: './'
   },
   optimization: {
     splitChunks: {
@@ -40,11 +41,7 @@ module.exports = {
   module: {
     rules: [{
       test: /\.pug$/,
-      oneOf: [
-        {
-          use: ['pug-loader']
-        }
-      ]
+      use: 'pug-loader'
     }, {
       test: /\.js$/,
       loader: 'babel-loader',
@@ -98,6 +95,7 @@ module.exports = {
     }
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: `${PATHS.assets}css/[name].[hash].css`,
     }),
@@ -106,13 +104,10 @@ module.exports = {
       { from: `${PATHS.src}/${PATHS.assets}fonts`, to: `${PATHS.assets}fonts` },
       { from: `${PATHS.src}/static`, to: '' },
     ]),
-
-    // Automatic creation any html pages (Don't forget to RERUN dev server)
-    // see more: https://github.com/vedees/webpack-template/blob/master/README.md#create-another-html-files
-    // best way to create pages: https://github.com/vedees/webpack-template/blob/master/README.md#third-method-best
     ...PAGES.map(page => new HtmlWebpackPlugin({
       template: `${PAGES_DIR}/${page}`,
-      filename: `./${page.replace(/\.pug/,'.html')}`
+      filename: `./${page.replace(/\.pug/,'.html')}`,
+      cache: false,
     }))
   ],
 }
