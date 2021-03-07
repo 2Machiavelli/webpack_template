@@ -3,5 +3,5 @@ import './js/'
 
 // SCSS
 import 'reset-css'
-import './assets/sass/main.sass'
+import './assets/stylus/main.styl'
 
