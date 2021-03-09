@@ -3,7 +3,6 @@ const fs = require('fs')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const PATHS = {
   src: path.join(__dirname, '../src'),
@@ -15,6 +14,7 @@ const PAGES_DIR = `${PATHS.src}/pug/pages/`
 const PAGES = fs.readdirSync(PAGES_DIR).filter(fileName => fileName.endsWith('.pug'))
 
 module.exports = {
+  target: 'web',
   externals: {
     paths: PATHS
   },
@@ -22,9 +22,8 @@ module.exports = {
     app: PATHS.src,
   },
   output: {
-    filename: `${PATHS.assets}js/[name].[hash].js`,
-    path: PATHS.dist,
-    publicPath: './'
+    filename: `${PATHS.assets}js/[name].[contenthash].js`,
+    path: PATHS.dist
   },
   optimization: {
     splitChunks: {
@@ -123,9 +122,8 @@ module.exports = {
     }
   },
   plugins: [
-    new CleanWebpackPlugin( ),
     new MiniCssExtractPlugin({
-      filename: `${PATHS.assets}css/[name].[hash].css`,
+      filename: `${PATHS.assets}css/[name].[contenthash].css`,
     }),
     new CopyWebpackPlugin([
       { from: `${PATHS.src}/static`, to: '' },
